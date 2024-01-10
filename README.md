@@ -17,7 +17,7 @@ sudo apt install pip
 
 (for termux)
 ```
-install git
-install python
-install pip
+apt install git
+apt install python
+apt install pip
 ```
