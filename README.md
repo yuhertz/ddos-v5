@@ -19,5 +19,5 @@ sudo apt install pip
 ```
 apt install git
 apt install python
-apt install pip
+apt install python-pip
 ```
