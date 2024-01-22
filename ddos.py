@@ -93,7 +93,6 @@ $$$$$$$  |$$$$$$$  | $$$$$$  |\$$$$$$  |
 
             made by github.com/yuhertz
                 Created by Hertz
-                  Made with Rocotai
 '''
 
 
