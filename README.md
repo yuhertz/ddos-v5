@@ -1,3 +1,7 @@
+# DDoS Version 5 (DANGEROUS)
+
+[WARNING] THIS COULD HARM YOUR OWN INTERNET SERVICE
+
 For termux and kali linux
 ```
 git clone https://github.com/yuhertz/ddos-v5
